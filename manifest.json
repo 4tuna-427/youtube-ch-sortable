@@ -1,0 +1,30 @@
+{
+    "name": "youtube-ch-sortable",
+    "description": "YouTubeの登録チャンネル欄項目をドラッグで並び替え可能にします。",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "permissions": ["storage"],
+    "action": {},
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": true
+    },
+    "background": {
+        "type": "module",
+        "service_worker": "background.js"
+    },
+    "content_scripts": [{
+        "matches": [
+            "*://*.youtube.com/*"
+        ],
+        "css": [
+            "content_scripts.css"
+        ],
+        "js": [
+            "lib/SortableJS/Sortable.js",
+            "content_scripts.js"
+        ],
+        "run_at": "document_end",
+        "all_frames": true
+    }]
+}

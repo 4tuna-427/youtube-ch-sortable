@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="panel">
+        <div class="h1">youtube-ch-sortable</div>
+        <div class="description">
+            <p>YouTubeの登録チャンネル欄項目をドラッグで並び替え可能にします。</p>
+            <p>・ドラッグ＆ドロップでチャンネルを移動します。</p>
+            <p>・Ctrl+左クリックで複数のチャンネルをまとめて移動可能です。</p>
+            <p>・配信中チャンネル欄を新たに追加します。</p>
+            <p>・登録チャンネル右横のアイコンから、登録チャンネルの仕切りを追加できます。</p>
+            <p>・チャンネルの登録を解除した場合、別のチャンネルの表示が消えることがあります。<br>
+            　実際には正しいチャンネルの登録が解除されており、画面を更新すると正しい表示になります。<br>
+            <p>・アカウントごとに並び替え情報を分ける機能はありません。<br>
+            　並び順のインポート・エクスポート機能を使用してください。<br>
+        </div>
+        <div class="h2">並び順設定ファイル</div>
+        <div class="document">
+            <div>
+                <div>
+                    文字コード：utf-8
+                </div>
+                <div>
+                    <label><button id="sequence-import">インポート</button></label>
+                    <label><button id="sequence-export">エクスポート</button></label>
+                </div>
+                <div>
+                    <span id="msg-completed-import" style="display:none;">インポートが完了しました。</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        © 2023 4tuna
+    </div>
+    <script src="options.js"></script>
+</body>
+</html>

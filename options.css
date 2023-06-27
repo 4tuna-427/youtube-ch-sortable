@@ -1,0 +1,48 @@
+html {
+    font-size: 62.5%;
+}
+
+body {
+    padding: 6rem;
+    background: #f7f9fa;
+    color: #000;
+    font-size: 1.4rem;
+}
+
+.panel {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 3.2em 3.2rem 4rem;
+    border-radius: 4px;
+    background: #fffffc;
+    border: 1px solid #cccccc;
+    box-sizing: border-box;
+}
+
+.h1 {
+    margin-bottom: 3rem;
+    font-size: 2.8rem;
+    font-weight: bold;
+}
+
+.h2 {
+    margin-top: 4.8rem;
+    margin-bottom: 1.6rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.document {
+    padding: 0 2rem;
+}
+
+.footer {
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 4rem;
+    color: #999b9c;
+}
+
+.footer a {
+    color: inherit;
+}
