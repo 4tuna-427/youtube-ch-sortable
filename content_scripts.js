@@ -340,24 +340,33 @@ class YoutubeSortChannel {
                 return isNotFiltered  // true:移動, false:移動しない
             },
             onStart: evt => {
+                const isMultiple = (evt.items.length > 0)
+                const items = isMultiple ? evt.items : [evt.item]
                 followerItems = []
-                const elem = Array.from(subscriptionsItemsElem.children)[evt.oldIndex];
-                // 区切り要素で折り畳み中の場合、次の区切りまでに存在する登録チャンネル項目要素を取得しておく
-                if (elem.classList.contains('ysc-divider')) {
-                    if (window.getComputedStyle(elem.getElementsByClassName('ysc-divider-minimizer')[0]).display === 'none') {
-                        const subscriptionsItemObjects = this.getSubscriptionsItemObjects()
-                        const myDividerIdx = evt.oldIndex
-                        if (myDividerIdx !== subscriptionsItemObjects.length - 1) {
-                            const nextDividerIdx = subscriptionsItemObjects.slice(myDividerIdx + 1).findIndex(obj => obj.type === 'divider') + (myDividerIdx + 1)
-                            const existsNextDivider = (nextDividerIdx !== myDividerIdx)
-                            if (existsNextDivider) {
-                                for(let i=myDividerIdx+1; i<nextDividerIdx; i++) {
-                                    followerItems.push(subscriptionsItemObjects[i].elem)
+                for(let i=0; i<items.length; i++) {
+                    const elem = items[i]
+                    followerItems.push([])
+                    // 区切り要素で折り畳み中の場合、次の区切りまでに存在する登録チャンネル項目要素を取得しておく
+                    if (elem.classList.contains('ysc-divider')) {
+                        if (window.getComputedStyle(elem.getElementsByClassName('ysc-divider-minimizer')[0]).display === 'none') {
+                            const subscriptionsItemObjects = this.getSubscriptionsItemObjects()
+                            const myDividerIdx = isMultiple ? evt.oldIndicies[i].index : evt.oldIndex
+                            if (myDividerIdx !== subscriptionsItemObjects.length - 1) {
+                                const nextDividerIdx = subscriptionsItemObjects.slice(myDividerIdx + 1).findIndex(obj => obj.type === 'divider') + (myDividerIdx + 1)
+                                const existsNextDivider = (nextDividerIdx !== myDividerIdx)
+                                if (existsNextDivider) {
+                                    for(let j=myDividerIdx+1; j<nextDividerIdx; j++) {
+                                        if (window.getComputedStyle(subscriptionsItemObjects[j].elem).display === 'none') {
+                                            followerItems[i].push(subscriptionsItemObjects[j].elem)
+                                        }
+                                    }
                                 }
-                            }
-                            else {
-                                for(let i=myDividerIdx+1; i<subscriptionsItemObjects.length; i++) {
-                                    followerItems.push(subscriptionsItemObjects[i].elem)
+                                else {
+                                    for(let j=myDividerIdx+1; j<subscriptionsItemObjects.length; j++) {
+                                        if (window.getComputedStyle(subscriptionsItemObjects[j].elem).display === 'none') {
+                                            followerItems[i].push(subscriptionsItemObjects[j].elem)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -365,12 +374,18 @@ class YoutubeSortChannel {
                 }
             },
             onEnd: evt => {
+                const isMultiple = (evt.items.length > 0)
+                const items = isMultiple ? evt.items : [evt.item]
                 // 区切り要素で折り畳み中の場合、取得しておいた登録チャンネル項目要素を移動後の区切り要素の下に移動する
-                const elem = evt.item
-                if (evt.oldIndex !== evt.newIndex) {
+                for(let i=0; i<items.length; i++) {
+                    const elem = items[i]
                     // 移動先の下に非表示中の登録チャンネル項目要素が存在する場合、その後に移動する
                     let nextElem = elem.nextElementSibling
-                    while (nextElem !== null && window.getComputedStyle(nextElem).display === 'none') {
+                    while (true) {
+                        if (!items.includes(nextElem)) {  // 一緒に移動中の項目要素は対象外とする
+                            if (nextElem == null) break  // 次の兄弟要素が存在しない場合、検索終了
+                            if (window.getComputedStyle(nextElem).display !== 'none') break  // 表示中の要素を発見した場合、検索終了
+                        }
                         nextElem = nextElem.nextElementSibling
                     }
                     nextElem.insertAdjacentElement('beforebegin', elem)
@@ -378,16 +393,16 @@ class YoutubeSortChannel {
                     if (elem.classList.contains('ysc-divider')) {
                         if (window.getComputedStyle(elem.getElementsByClassName('ysc-divider-minimizer')[0]).display === 'none') {
                             let targetElem = elem
-                            if (followerItems.length > 0) {
-                                followerItems.forEach(followerItem => {
+                            if (followerItems[i].length > 0) {
+                                followerItems[i].forEach(followerItem => {
                                     targetElem.insertAdjacentElement('afterend', followerItem)
                                     targetElem = followerItem
                                 })
                             }
-                            followerItems = []
                         }
                     }
                 }
+                followerItems = []
 
                 this.saveSortedSubscriptionsItemIds()
             }
